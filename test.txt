@@ -1,0 +1,72 @@
+istream & operator>>(istream & i, node_history & n)
+{
+	char medal_type[10];
+	char history_story[1000];
+	if(n.medals)
+		delete [] n.medals;
+	if(n.history)
+		delete [] n.history;
+	cout <<"Enter in the medal type. (Gold, Silver, or Bronze) \n";
+	i >>medal_type;
+	i.ignore(10, '\n');
+	cout <<"Enter in any historical information or sories. \n";
+	i >>history_story;
+	i.ignore(1000, '\n');
+	n.medals = new char[strlen(medal_type) + 1];
+	strcpy(n.medals, medal_type);
+	n.history = new char[strlen(history_story) + 1];
+	strcpy(n.history, history_story);
+	return i;
+}
+
+
+istream & operator>>(istream & i, athlete & a)
+{
+	char temp_name[30];
+	char temp_events[100];
+	if(a.name)
+		delete [] a.name;
+	if(a.events)
+		delete [] a.events;
+	cout <<"Enter in the athlete's name. \n";
+	i>>temp_name;
+	i.ignore(30, '\n');
+	cout <<"Enter in the athlete's events. \n";
+	i>>temp_events;
+	i.ignore(100, '\n');
+	a.name = new char[strlen(temp_name) + 1];
+	strcpy(a.name, temp_name);
+	a.events = new char[strlen(temp_events) + 1];
+	strcpy(a.events, temp_events);	
+	a.add_history_wrap();
+	return i;
+}
+
+
+void athlete :: add_history_wrap()
+{
+	cin >>add_history(head);
+	return;
+}
+
+
+void athlete :: add_history(node_history *& head)
+{
+	if(!head)
+	{
+		head = new node_history;
+		cin >> head;
+		head -> go_next() = NULL;
+		return;
+	}
+	if(!head -> go_next())
+	{
+		node_history * temp = head;
+		head = new node_history;
+		cin >> head;
+		head -> go_next() = temp;
+		delete temp;
+		temp = NULL;
+		return;
+	}
+}
